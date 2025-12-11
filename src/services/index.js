@@ -51,13 +51,17 @@ app.get('/usuarios', (req, res) => {
   res.json(usuarios);
 });
 
-app.get('/items/:id', (req, res) => { 
-  const id = req.params.id; 
-  const category = req.query.category; 
-  const price = req.query.price; 
+app.get('/item/:id', (req, res) => { 
+const itemId = req.params.id; 
+// Aquí puedes hacer algo como buscar en tu base de datos 
+res.send(`Devolviendo el ítem con ID: ${itemId}`); 
+}); 
 
-  res.send(`ID: ${id}, Categoría: ${category}, Precio: ${price}`);
-});
+app.get('/items', (req, res) => { 
+const category = req.query.category; 
+const price = req.query.price; 
+res.send(`Categoría: ${category}, Precio: ${price}`); 
+}); 
  
 app.post('/items/:id', (req, res) => { 
   const id = req.params.id; 
@@ -72,7 +76,7 @@ app.put('/items/:id', (req, res) => {
   const category = req.query.category; 
   const price = req.query.price; 
 
-  res.send(`ID: ${id}, Categoría: ${category}, Precio: ${price}`);
+  res.send(`Modificando el ítem con ID: ${itemId}`); 
 });
 
 app.delete('/items/:id', (req, res) => { 
@@ -80,7 +84,7 @@ app.delete('/items/:id', (req, res) => {
   const category = req.query.category; 
   const price = req.query.price; 
 
-  res.send(`ID: ${id}, Categoría: ${category}, Precio: ${price}`);
+  res.send(`Borrando el ítem con ID: ${itemId}`); 
 });
 
 // Middleware para manejar errores 404 
