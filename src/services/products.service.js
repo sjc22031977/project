@@ -1,35 +1,45 @@
-// products.service.js 
-const products = [ 
-{ 
-id: 1, 
-name: 'Producto 1', 
-price: 1000 
-},
-{ 
-          id: 2, 
-          name: 'Producto 2', 
-          price: 2000 
-      }, 
-    ] 
+ // products.service.js 
+  import * as productService from "../models/products.model.js"; 
  
-    export const getAllProducts = () => { 
-        return products; 
-    }; 
+  export const getAllProducts = () => { 
+     return productService.getAllProducts(); 
+  }; 
  
-    export const getProductById = async (id) => { 
-      return products.find(product => product.id == id); 
-    }; 
+  export const getProductById = async (id) => { 
+    return productService.getProductById(id); 
+  }; 
  
-    export const createProduct = async (productData) => { 
-        const newProduct = { 
-          id: products.length + 1, 
-          name: productData.name, 
-          price: productData.price 
-      }; 
-      products.push(newProduct); 
- 
-      return newProduct; 
-    }; 
- 
-    // ... (funciones para updateProduct y deleteProduct de manera 
-similar) 
+  export const createProduct = async (productData) => { 
+    const { name, price } = productData;
+    return productService.saveProduct(name, price); 
+}; 
+export const deleteProduct = async (id) => { 
+return productService.deleteProduct(id); 
+}; 
+
+  export const applyDiscountToCategory = (category, discount) => { 
+      const products = Product.getAllProducts(); 
+      const discountedProducts = products.map(product => { 
+        if (product.category === category) { 
+          return { ...product, price: product.price * (1 - discount) }; 
+        } 
+        return product; 
+      }); 
+      return discountedProducts; 
+  }; 
+
+  
+  export const getProductWithUser = (productId, userId) => { 
+    const product = Product.getProductById(productId); 
+    const user = User.getUserById(userId); 
+    return { product, user }; 
+  }; 
+
+  export const deleteProductIfAllowed = (productId, userId) => { 
+    const user = User.getUserById(userId); 
+    if (user.role === 'admin') { 
+      return Product.deleteProduct(productId); 
+    } else { 
+      throw new Error('Unauthorized'); 
+    } 
+  }; 
