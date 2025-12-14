@@ -1,28 +1,42 @@
-// products.model.js 
-import fs from 'fs'; 
-import path from 'path'; 
-const __dirname = import.meta.dirname; 
-// Ruta al archivo JSON que simula la "base de datos" 
-const dataPath = path.join(__dirname, '../data/products.json'); 
-// Método para buscar un producto por su ID 
-  export function getProductById(id) { 
-    const products = this.getAllProducts(); 
-    return products.find(product => product.id === id); 
+  // products.model.js 
+  import { db } from '../data/data.js'; 
+  import { 
+      collection, 
+      getDocs, 
+      getDoc, 
+      addDoc, 
+      deleteDoc, 
+      doc 
+  } from 'firebase/firestore'; 
+ 
+  const productsCollection = collection(db, 'products'); 
+ 
+  // Método para buscar un producto por su ID 
+   export async function getProductById(id) { 
+    const productDoc = await getDoc(doc(productsCollection, id)); 
+    if (productDoc.exists()) { 
+        return productDoc.data(); 
+    } else { 
+        return null; 
+    } 
   }; 
+ 
   // Método para obtener todos los productos 
-  export function getAllProducts() { 
-    const data = fs.readFileSync(dataPath, 'utf-8'); 
-    return JSON.parse(data); 
+  export async function getAllProducts() { 
+    const querySnapshot = await getDocs(productsCollection); 
+    const products = []; 
+    querySnapshot.forEach((doc) => { 
+        products.push({ id: doc.id, ...doc.data() }); 
+    }); 
+    return products; 
   }; 
-  // Método para guardar un producto en el archivo JSON 
-  export function saveProduct(name, price) { 
-    const products = this.getAllProducts(); 
-    products.push({ id: products.length, name, price }); 
-    fs.writeFileSync(dataPath, JSON.stringify(products, null, 2)); 
+ 
+  // Método para guardar un producto en Firestore 
+  export async function saveProduct(product) { 
+    await addDoc(productsCollection, product); 
   }; 
+ 
   // Método para eliminar un producto por su ID 
-  export function deleteProduct(id) { 
-    const products = this.getAllProducts(); 
-    products = products.filter(product => product.id !== id); 
-    fs.writeFileSync(dataPath, JSON.stringify(products, null, 2));
-  }; 
+  export async function deleteProduct(id) { 
+    await deleteDoc(doc(productsCollection, id)); 
+  };
