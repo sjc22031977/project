@@ -6,6 +6,12 @@ import authRouter from './src/routes/auth.routes.js';
 
 const app = express(); 
 
+app.get('/', (req, res) => {
+  res.send('API funcionando en Vercel');
+});
+
+export default app;
+
 // Configuración básica: Permitir todos los orígenes 
 app.use(cors()); 
 
