@@ -20,3 +20,13 @@ export const createProduct = async (req, res) => {
   const newProduct = productsService.createProduct({ name, price }); 
   res.status(201).json(newProduct); 
 }; 
+
+export const deleteProduct = async (req, res) => {
+  const id = req.params.id;
+  const deleted = productsService.deleteProduct(id);
+  if (deleted) {
+    res.status(200).json({ message: 'Producto eliminado correctamente' });
+  } else {
+    res.status(404).json({ message: 'Producto no encontrado' });
+  }
+};

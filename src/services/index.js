@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import productsRouter from './src/routes/products.routes.js'; 
 import authRouter from './src/routes/auth.routes.js'; 
+import categoriesRouter from './src/routes/categories.routes.js';
+import usersRouter from './src/routes/users.routes.js';
 
 const app = express(); 
 
@@ -10,11 +12,8 @@ app.get('/', (req, res) => {
   res.send('API funcionando en Vercel');
 });
 
-export default app;
-
 // Configuración básica: Permitir todos los orígenes 
 app.use(cors()); 
-
 app.use(bodyParser.json()); 
 
 // Aquí irían las rutas 
@@ -28,6 +27,9 @@ app.use((req, res, next) => {
   res.status(404).send('Recurso no encontrado'); 
 }); 
 
-const PORT = 3000; 
+export default app;
+``
 
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`)); 
+/*const PORT = 3000; 
+
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`)); */
